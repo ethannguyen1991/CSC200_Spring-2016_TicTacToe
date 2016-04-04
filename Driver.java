@@ -6,22 +6,51 @@ public class Driver
 	static char[] row1 = {'_','_','_'};
 	static char[] row2 = {'_','_','_'};
 	static char[] row3 = {'_','_','_'};
+	static char player1Move = 'X';
+	static char player2Move = 'O';
 	
-	public static void main(String[] args)
+	public static void main(String[] args)//Driver method, used to launch the necessary methods to get started
 	{
-		Driver.displayBoard();
-		System.out.print("Please enter a row:");
-		int row = Driver.getIntFromUser();
-		System.out.print("Please enter a column:");
-		int column = Driver.getIntFromUser();
-		Driver.makeMove(row, column, 'X');
-		Driver.displayBoard();
+		
+		playGame();
+		
 	}
+	
+	/*
+	toggle between the X and O player asking each one to make
+	moves indefinitely.  The new board should be shown after each
+	move
+	*/
 	static void playGame()
 	{
-		//toggle between the X and O player asking each one to make
-		//moves indefinitely.  The new board should be shown after each
-		//move
+		Scanner inputReader = new Scanner(System.in);
+		boolean player1Turn = true;
+		char currentMove = player1Move;
+		
+		for(int i = 0; i < 9; i++){
+			//Determine move
+			if(player1Turn){
+				System.out.println(player1Move+"'s move");
+				currentMove = player1Move;
+			}else{
+				System.out.println(player2Move+"'s move");
+				currentMove = player2Move;
+			}
+			
+			//Display and prompt
+			Driver.displayBoard();
+			System.out.print("Please enter a row:");
+			int row = Driver.getIntFromUser(inputReader);
+			System.out.print("Please enter a column:");
+			int column = Driver.getIntFromUser(inputReader);
+			
+			
+			Driver.makeMove(row, column, currentMove);
+			//toggle 
+			player1Turn = !player1Turn;//true ->false, false -> true
+		}
+		inputReader.close();
+		System.out.println("Game Over!");
 	}
 	
 	static void makeMove(int row, int column, char move)
@@ -38,10 +67,9 @@ public class Driver
 		theRow[column-1] = move;
 	}
 	
-	static int getIntFromUser()
+	static int getIntFromUser(Scanner inputReader)
 	{
-		Scanner input = new Scanner(System.in);
-		return input.nextInt();
+		return inputReader.nextInt();
 	}
 	
 	static void displayRow(char[] row)
@@ -58,7 +86,7 @@ public class Driver
 			}
 			else
 			{
-				System.out.print("_O_");
+				System.out.print("_O_\t");
 			}
 		}
 		System.out.println("");
